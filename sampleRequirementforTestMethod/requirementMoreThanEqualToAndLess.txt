@@ -1,0 +1,4 @@
+numpy>=1.23.5<2.0.0;
+pypiwin32>=223<230;
+soupsieve>=2.3.2.post1<2.3.4.post1;
+certifi>=2022.6.15<2022.7.15
