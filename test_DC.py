@@ -6,12 +6,12 @@ class testDependencyComparion(unittest.TestCase):
     def test_RequirementValid(self):
         self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementAllValid.txt'),
         ['numpy is valid','SQLAlchemy is valid','MarkupSafe is valid','six is valid'
-        ,'pypiwin32 is valid','soupsieve is valid','certifi is valid'])
+        ,'pypiwin32 is valid','soupsieve unable to determine','certifi is valid'])
     
     def test_RequirementInvalid(self):
         self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementAllInvalid.txt'),
         ['numpy is Invalid','SQLAlchemy is Invalid','MarkupSafe is Invalid','six is Invalid'
-         ,'pypiwin32 is Invalid','soupsieve is Invalid','certifi is Invalid'])
+         ,'pypiwin32 is Invalid','soupsieve unable to determine','certifi is Invalid'])
     
     def test_RequirementDoesntExist(self):
         self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementDoesntExist.txt'),

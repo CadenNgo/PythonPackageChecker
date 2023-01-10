@@ -28,7 +28,9 @@ def comparisonPackage(requirementTextfileName):
             if(len(package) == 3):
                     if "more" in package or "moreThanEqualTo" in package:
                         for id,item in enumerate(package[1]):
-                            if item < localPackages[index][1][id]:
+                            if  not re.match('[0-9]',str(item)) and not re.match('[0-9]',localPackages[index][1][id]):
+                                validOrInvalid = 'UD' #Unable to determined
+                            elif item < localPackages[index][1][id]:
                                 validOrInvalid = True
                     if "equal" in package or "moreThanEqualTo" in package:
                         listofCheck = []
@@ -65,6 +67,8 @@ def comparisonPackage(requirementTextfileName):
             
             if(validOrInvalid == True):
                 returnMessage.append(package[0] + " is valid")
+            elif(validOrInvalid == 'UD'):
+                returnMessage.append(package[0] + " unable to determine")
             else:
                 returnMessage.append(package[0] + " is Invalid")
         else:
