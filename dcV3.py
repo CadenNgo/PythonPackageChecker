@@ -9,9 +9,6 @@ def comparisonPackage(requirementTextfileName):
 
     for idx,package in enumerate(localPackages):
         majorminorpatch = re.split('\.',package[1])
-        if(len(majorminorpatch) == 2):
-        #Add zero into systemtic versioning(patch) Eg. 1.1 = 1.1.0
-            majorminorpatch.append(0)
         for index,item in enumerate(majorminorpatch):
             if re.match('[0-9]',str(item)):
                 majorminorpatch[index] = int(item)
@@ -41,6 +38,16 @@ def comparisonPackage(requirementTextfileName):
                                 listofCheck.append(False)
                         if all(listofCheck):
                             validOrInvalid = True
+                    if "tildeEqual" in package:
+                        for id,item in enumerate(package[1]):
+                            if id == len(package[1])-1:
+                                if package[1][id] <= localPackages[index][1][id]:
+                                    validOrInvalid = True
+                            else:
+                                if item == localPackages[index][1][id]:
+                                    pass
+                                else:
+                                    break
             elif(len(package) == 5):
                 firstCheck = False; #Check if the condition satisfies the first condition
                 secondCheck = False; #Check if the condition satisfies the first condition
@@ -66,11 +73,11 @@ def comparisonPackage(requirementTextfileName):
                     validOrInvalid = True
             
             if(validOrInvalid == True):
-                returnMessage.append(package[0] + " is valid")
+                returnMessage.append(package[0] + " is supported")
             elif(validOrInvalid == 'UD'):
                 returnMessage.append(package[0] + " unable to determine")
             else:
-                returnMessage.append(package[0] + " is Invalid")
+                returnMessage.append(package[0] + " is not supported")
         else:
             if(package[1] == "invalidSymbol"):
                 returnMessage.append(package[0] + " Invalid Symbol")

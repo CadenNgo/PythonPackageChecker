@@ -1,0 +1,5 @@
+numpy<=1;
+numpy<=1.23;
+numpy<=1.23.5;
+numpy<=2.3.2.post1;
+numpy<=2022.6.15
