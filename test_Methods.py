@@ -4,7 +4,6 @@ import methods
 class testUtilityMethods(unittest.TestCase):
 
     def test_FindIndexSucess(self):
-
         testList = [['numpy',[1,2,3]],['Mako',[3,2,2]]]
         self.assertEqual(methods.findIndex(testList,'numpy'),0)
 

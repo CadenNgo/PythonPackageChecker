@@ -1,0 +1,15 @@
+numpy> 1;
+
+numpy1>1.0;
+numpy2>1.0.0;
+numpy3>1.0.0.post1;
+numpy4>2022.10.11;
+numpy5>Abc
+
+numpy21>2
+numpy22>1.9
+numpy23>1.9.9
+
+numpy31>2
+numpy32>2.0
+numpy33>2.0.0

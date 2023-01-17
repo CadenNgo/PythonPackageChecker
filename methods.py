@@ -8,18 +8,16 @@ def getPackagesDetails(filename):
 
     #Load requirement files.
     f = open(filename,'r')
-    storage = f.read().replace(";","").split('\n')
-
+    storage = f.read().replace(";","").replace(" ","").split('\n')
+    storage = list(filter(None,storage))
     #Create a list to store the name, version and expressions
     returnNameVersionExpressions = [None] * len(storage)
     regex = r"[^(>=)|(<)|(==)|(~=)|(<=)|(>)|\w|\d\.\,\;\ ]"
-
     for idx,item in enumerate(storage):
         if not re.search(regex,item):
         #if('>=' in item or '>' in item or '<' in item or '~=' in item or '==' in item):
         #split the package name and version 
             nameVersion = re.split('<=|>=|>|<|~=|==|,.',item)
-            print(nameVersion)
             #split the version into major,minor and patch
             index = 0
             while(index < len(nameVersion)):
@@ -47,9 +45,6 @@ def getPackagesDetails(filename):
         else:
             returnNameVersionExpressions[idx] = [item,"invalidSymbol"]
 
-    print('i am here')
-    print(returnNameVersionExpressions)
-    print('i am here 2')
     return returnNameVersionExpressions
 
 def findIndex(stringArr, keyString):

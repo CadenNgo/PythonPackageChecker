@@ -1,0 +1,15 @@
+numpy< 2;
+
+numpy1<1.1;
+numpy2<1.0.1;
+numpy3<1.0.1.post1;
+numpy4<2022.10.12;
+numpy5<Abc
+
+numpy21<1
+numpy22<1.8
+numpy23<1.9.8
+
+numpy31<2
+numpy32<2.0
+numpy33<2.0.0

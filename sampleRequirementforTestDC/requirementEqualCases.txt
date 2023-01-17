@@ -1,0 +1,20 @@
+numpy== 1;
+numpy==2;
+
+numpy1==1.0;
+numpy2==1.0.0;
+numpy3==1.0.0.post1;
+numpy4==2022.10.11;
+numpy5==Abc
+
+numpy11==2
+numpy12==2.0
+numpy13==2.0.0
+
+numpy21==2
+numpy22==2.0
+numpy23==2.0.0
+
+numpy31==2
+numpy32==2.0
+numpy33==2.0.0
