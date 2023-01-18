@@ -68,8 +68,8 @@ def comparisonPackage(requirementTextfileName):
             elif(len(package) == 5 and len(localPackages[index][1]) == len(package[1]) and len(localPackages[index][1]) == len(package[2])):
                 firstCheck = False; #Check if the condition satisfies the first condition
                 secondCheck = False; #Check if the condition satisfies the first condition
-                if "more" and "less" in package or "moreThanEqualTo" and "less" in package:
-                    for id,item in enumerate(package[1]):
+                if "more" and "less" in package or "moreThanEqualTo" and "less" in package or "lessThanEqualTo" and "more" in package or "moreThanEqualTo" in package or "lessThanEqualTo" in package:
+                    for id,item in enumerate(package[1]): 
                         if  not re.match('[0-9]',str(item)) or not re.match('[0-9]',str(localPackages[index][1][id])):
                                 validOrInvalid = 'UD' #Unable to determined
                         else:
@@ -89,8 +89,18 @@ def comparisonPackage(requirementTextfileName):
                             listofCheck.append(True)
                         else:
                             listofCheck.append(False)
-                        if all(listofCheck):
-                            firstCheck = True
+                    if all(listofCheck):
+                        firstCheck = True
+                
+                if "lessThanEqualTo" in package:
+                    listofCheck = []
+                    for id,item in enumerate(package[2]):
+                        if item == localPackages[index][1][id]:
+                            listofCheck.append(True)
+                        else:
+                            listofCheck.append(False)
+                    if all(listofCheck):
+                        secondCheck = True
 
                 if(firstCheck == True and secondCheck == True):
                     validOrInvalid = True

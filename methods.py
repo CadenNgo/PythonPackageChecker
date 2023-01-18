@@ -18,6 +18,7 @@ def getPackagesDetails(filename):
         #if('>=' in item or '>' in item or '<' in item or '~=' in item or '==' in item):
         #split the package name and version 
             nameVersion = re.split('<=|>=|>|<|~=|==|,.',item)
+            print(nameVersion)
             #split the version into major,minor and patch
             index = 0
             while(index < len(nameVersion)):

@@ -7,7 +7,6 @@ class mockObject:
         self.project_name = project_name
         self.version = version
 
-
 class testDependencyComparion(unittest.TestCase):
                
     def test_RequirementEqualSymbol(self):
@@ -73,7 +72,46 @@ class testDependencyComparion(unittest.TestCase):
         "numpy32 version mismatch with local package",
         "numpy33 version mismatch with local package"])
 
-    def test_RequirementMinusSymbol(self):
+    def test_RequirementMoreThanEqualToSymbol(self):
+        pkg_resources.working_set = [
+            mockObject('numpy','2'),  #numpy>= 1; 
+            mockObject('numpy1','1.1'), #numpy1>=1.0;
+            mockObject('numpy2','1.0.1'), #numpy2>=1.0.0;
+            mockObject('numpy3','1.0.1.post1'), #numpy3>=1.0.0.post1;
+            mockObject('numpy4','2022.10.12'),#numpy4>=2022.10.11;
+            mockObject('numpy5','1.0.0'), #numpy5>=Abc
+            mockObject('numpy21','1'), #    numpy21>=2
+            mockObject('numpy22','1.8'), #numpy22>=2.0 
+            mockObject('numpy23','1.9.8'), #numpy23>=2.0.0
+            mockObject('numpy31','2.0'), #numpy31>=2
+            mockObject('numpy32','2.0.0'), #numpy32>=2.0
+            mockObject('numpy33','2'), #numpy33>=2.0.0
+            mockObject('numpy41','1'), #numpy41>=1
+            mockObject('numpy42','1.0'), #numpy42>=1.0
+            mockObject('numpy43','1.0.0'), #numpy43>=1.0.0
+            mockObject('numpy44','1.0.0.post1'), #numpy44>=1.0.0.post1
+            mockObject('numpy45','2022.10.11')] #numpy45>=2022.10.11
+
+        self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementMoreThanEqualToCases.txt'),
+        ["numpy is supported",
+        "numpy1 is supported",
+        "numpy2 is supported",
+        "numpy3 unable to determine",
+        "numpy4 is supported",
+        "numpy5 unable to determine",
+        "numpy21 is not supported",
+        "numpy22 is not supported",
+        "numpy23 is not supported",
+        "numpy31 version mismatch with local package",
+        "numpy32 version mismatch with local package",
+        "numpy33 version mismatch with local package",
+        "numpy41 is supported",
+        "numpy42 is supported",
+        "numpy43 is supported",
+        "numpy44 is supported",
+        "numpy45 is supported",])
+
+    def test_RequirementLessSymbol(self):
         pkg_resources.working_set = [
             mockObject('numpy','1'),  #numpy< 2; 
             mockObject('numpy1','1.0'), #numpy1<1.1;
@@ -87,7 +125,7 @@ class testDependencyComparion(unittest.TestCase):
             mockObject('numpy31','2.0'), #numpy31<2
             mockObject('numpy32','2.0.0'), #numpy32<2.0
             mockObject('numpy33','2')] #numpy33<2.0.0
-        self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementMinusCases.txt'),
+        self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementLessCases.txt'),
         ["numpy is supported",
         "numpy1 is supported",
         "numpy2 is supported",
@@ -100,6 +138,45 @@ class testDependencyComparion(unittest.TestCase):
         "numpy31 version mismatch with local package",
         "numpy32 version mismatch with local package",
         "numpy33 version mismatch with local package"])
+
+    def test_RequirementLessThanEqualToSymbol(self):
+        pkg_resources.working_set = [
+            mockObject('numpy','1'),  #numpy<= 2; 
+            mockObject('numpy1','1.0'), #numpy1<=1.1;
+            mockObject('numpy2','1.0.0'), #numpy2<=1.0.1;
+            mockObject('numpy3','1.0.0.post1'), #numpy2<=1.0.1.post1;
+            mockObject('numpy4','2022.10.11'),#numpy4<=2022.10.12;
+            mockObject('numpy5','1.0.0'), #numpy5<=Abc
+            mockObject('numpy21','2'), #    numpy21<=1
+            mockObject('numpy22','1.9'), #numpy22<=1.8 
+            mockObject('numpy23','1.9.9'), #numpy23<=1.9.8
+            mockObject('numpy31','2.0'), #numpy31<=2
+            mockObject('numpy32','2.0.0'), #numpy32<=2.0
+            mockObject('numpy33','2'), #numpy33<=2.0.0
+            mockObject('numpy41','1'), #numpy41<=1
+            mockObject('numpy42','1.0'), #numpy42<=1.0
+            mockObject('numpy43','1.0.0'), #numpy43<=1.0.0
+            mockObject('numpy44','1.0.0.post1'), #numpy44<=1.0.0.post1
+            mockObject('numpy45','2022.10.11')#numpy45<=2022.10.11
+            ] 
+        self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementLessThanEqualToCases.txt'),
+        ["numpy is supported",
+        "numpy1 is supported",
+        "numpy2 is supported",
+        "numpy3 unable to determine",
+        "numpy4 is supported",
+        "numpy5 unable to determine",
+        "numpy21 is not supported",
+        "numpy22 is not supported",
+        "numpy23 is not supported",
+        "numpy31 version mismatch with local package",
+        "numpy32 version mismatch with local package",
+        "numpy33 version mismatch with local package",
+        "numpy41 is supported",
+        "numpy42 is supported",
+        "numpy43 is supported",
+        "numpy44 is supported",
+        "numpy45 is supported"])
   
     def test_RequirementTidleEqualSymbol(self):
         pkg_resources.working_set = [
@@ -163,6 +240,129 @@ class testDependencyComparion(unittest.TestCase):
         "numpy11 version mismatch with local package",
         "numpy12 version mismatch with local package",
         "numpy13 version mismatch with local package",])
+    
+    def test_RequirementMoreThanEqualToAndLessSymbols(self):
+        pkg_resources.working_set = [
+            mockObject('numpy','2'), #numpy=>1<3
+            mockObject('numpy1','1.5'), #numpy1=>1.1<2.0
+            mockObject('numpy2','1.5.1'), #numpy2=>1.1.2<2.0.0;
+            mockObject('numpy3','1.0.1.post1'), #numpy3=>1.0.0.post1<2.0.0.post1
+            mockObject('numpy4','2022.10.12'), #numpy4=>2022.10.11<2022.11.11;
+            mockObject('numpy5','1.5.1'), #numpy5=>Abc
+            mockObject('numpy6','2.0.9'), #numpy6=>2.0.0<2.1
+            mockObject('numpy7','1.9.9'), #numpy7=>1.9<2.1.0
+            mockObject('numpy8','1.9.9'), #numpy8=>3<1
+            mockObject('numpy9','1.9'), #numpy9=>2.0<1.8
+            mockObject('numpy10','1.9.9'), #numpy10=>2.0.1<1.8.9
+            mockObject('numpy11','2.0'), #numpy11=>1<3
+            mockObject('numpy12','1.9.9'), #numpy12=>1.8<2.0
+            mockObject('numpy13','2'), #numpy13=>1.8.9<2.0.1
+            mockObject('numpy14','1'), #numpy14=>1<3
+            mockObject('numpy15','1.8'), #numpy15=>1.8<2.0
+            mockObject('numpy16','1.8.9'), #numpy16=>1.8.9<2.0.1
+            ] 
+        self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementMoreThanEqualToAndLessCases.txt'),
+        ["numpy is supported",
+        "numpy1 is supported",
+        "numpy2 is supported",
+        "numpy3 is supported",
+        "numpy4 is supported",
+        "numpy5 unable to determine",
+        "numpy6 unable to determine the requirement",
+        "numpy7 unable to determine the requirement",
+        "numpy8 version mismatch with local package",
+        "numpy9 is not supported",
+        "numpy10 is not supported",
+        "numpy11 version mismatch with local package",
+        "numpy12 version mismatch with local package",
+        "numpy13 version mismatch with local package",
+        "numpy14 is supported",
+        "numpy15 is supported",
+        "numpy16 is supported"])
+
+    def test_RequirementMoreAndLessThanEqualToSymbols(self):
+        pkg_resources.working_set = [
+            mockObject('numpy','2'), #numpy>1<=3
+            mockObject('numpy1','1.5'), #numpy1>1.1<=2.0
+            mockObject('numpy2','1.5.1'), #numpy2>1.1.2<=2.0.0;
+            mockObject('numpy3','1.0.1.post1'), #numpy3>1.0.0.post1<=2.0.0.post1
+            mockObject('numpy4','2022.10.12'), #numpy4>2022.10.11<=2022.11.11;
+            mockObject('numpy5','1.5.1'), #numpy5>Abc<=Bba
+            mockObject('numpy6','2.0.9'), #numpy6>2.0.0<=2.1
+            mockObject('numpy7','1.9.9'), #numpy7>1.9<=2.1.0
+            mockObject('numpy8','1.9.9'), #numpy8>3<=1
+            mockObject('numpy9','1.9'), #numpy9>2.0<=1.8
+            mockObject('numpy10','1.9.9'), #numpy10>2.0.1<=1.8.9
+            mockObject('numpy11','2.0'), #numpy11>1<=3
+            mockObject('numpy12','1.9.9'), #numpy12>1.8<=2.0
+            mockObject('numpy13','2'), #numpy13>1.8.9<=2.0.1
+            mockObject('numpy14','1'), #numpy14>1<=3
+            mockObject('numpy15','1.8'), #numpy15>1.8<=2.0
+            mockObject('numpy16','1.8.9'), #numpy16>1.8.9<=2.0.1
+            ] 
+        self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementMoreAndLessThanEqualToCases.txt'),
+        ["numpy is supported",
+        "numpy1 is supported",
+        "numpy2 is supported",
+        "numpy3 is supported",
+        "numpy4 is supported",
+        "numpy5 unable to determine",
+        "numpy6 unable to determine the requirement",
+        "numpy7 unable to determine the requirement",
+        "numpy8 version mismatch with local package",
+        "numpy9 is not supported",
+        "numpy10 is not supported",
+        "numpy11 version mismatch with local package",
+        "numpy12 version mismatch with local package",
+        "numpy13 version mismatch with local package",
+        "numpy14 is supported",
+        "numpy15 is supported",
+        "numpy16 is supported"])
+    
+    def test_RequirementMoreThanEqualToAndLessThanEqualToSymbols(self):
+        pkg_resources.working_set = [
+            mockObject('numpy','2'), #numpy>=1<=3
+            mockObject('numpy1','1.5'), #numpy1>=1.1<=2.0
+            mockObject('numpy2','1.5.1'), #numpy2>=1.1.2<=2.0.0;
+            mockObject('numpy3','1.0.1.post1'), #numpy3>=1.0.0.post1<=2.0.0.post1
+            mockObject('numpy4','2022.10.12'), #numpy4>=2022.10.11<=2022.11.11;
+            mockObject('numpy5','1.5.1'), #numpy5>=Abc<=Bba
+            mockObject('numpy6','2.0.9'), #numpy6>=2.0.0<=2.1
+            mockObject('numpy7','1.9.9'), #numpy7>=1.9<=2.1.0
+            mockObject('numpy8','1.9.9'), #numpy8>=3<=1
+            mockObject('numpy9','1.9'), #numpy9>=2.0<=1.8
+            mockObject('numpy10','1.9.9'), #numpy10>=2.0.1<=1.8.9
+            mockObject('numpy11','2.0'), #numpy11>=1<=3
+            mockObject('numpy12','1.9.9'), #numpy12>=1.8<=2.0
+            mockObject('numpy13','2'), #numpy13>=1.8.9<=2.0.1
+            mockObject('numpy14','1'), #numpy14>=1<=3
+            mockObject('numpy15','1.8'), #numpy15>=1.8<=2.0
+            mockObject('numpy16','1.8.9'), #numpy16>=1.8.9<=2.0.1
+            mockObject('numpy17','3'), #numpy17>=1<=3
+            mockObject('numpy18','2.0'), #numpy18>=1.8<=2.0
+            mockObject('numpy19','2.0.1'), #numpy19>=1.8.9<=2.0.1
+            ] 
+        self.assertEqual(dcV3.comparisonPackage('sampleRequirementforTestDC/requirementMoreThanEqualToAndLessThanEqualToCases.txt'),
+        ["numpy is supported",
+        "numpy1 is supported",
+        "numpy2 is supported",
+        "numpy3 is supported",
+        "numpy4 is supported",
+        "numpy5 unable to determine",
+        "numpy6 unable to determine the requirement",
+        "numpy7 unable to determine the requirement",
+        "numpy8 version mismatch with local package",
+        "numpy9 is not supported",
+        "numpy10 is not supported",
+        "numpy11 version mismatch with local package",
+        "numpy12 version mismatch with local package",
+        "numpy13 version mismatch with local package",
+        "numpy14 is supported",
+        "numpy15 is supported",
+        "numpy16 is supported",
+        "numpy17 is supported",
+        "numpy18 is supported",
+        "numpy19 is supported"])
     
     def test_RequirementDoesntExist(self):
         pkg_resources.working_set = [
