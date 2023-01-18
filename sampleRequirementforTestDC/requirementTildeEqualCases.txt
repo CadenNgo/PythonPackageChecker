@@ -1,0 +1,16 @@
+numpy~= 1;
+
+numpy1~= 1.0;
+numpy2~= 1.0.0;
+numpy3~= 1.0.1;
+numpy4~= 1.0.1;
+numpy5~= 1.0.5;
+
+numpy6~= 1.0.0.post1;
+numpy7~= 1.0.0.post1;
+
+numpy8~= Abc;
+
+numpy9~=2;
+numpy10~=2.0;
+numpy11~=2.0.0;

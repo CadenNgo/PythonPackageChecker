@@ -17,7 +17,7 @@ def comparisonPackage(requirementTextfileName):
     incomingPackages = methods.getPackagesDetails(requirementTextfileName)
 
     for package in incomingPackages:
-
+        print(package)
         validOrInvalid = False
         #if package name exsists in the localPackages then continue
         if any(package[0] in x for x in localPackages):
@@ -43,7 +43,20 @@ def comparisonPackage(requirementTextfileName):
                                 else:
                                     if item != localPackages[index][1][id]:
                                         break
-                    if "equal" in package or "moreThanEqualTo" in package or "lessThanEqualTo" in package:
+                    if "tildeEqual" in package:
+                        for id,item in enumerate(package[1]):
+                            if  not re.match('[0-9]',str(item)) or not re.match('[0-9]',str(localPackages[index][1][id])):
+                                validOrInvalid = 'UD' #Unable to determined
+                            else:
+                                if id == len(package[1])-1:
+                                    if package[1][id] <= localPackages[index][1][id]:
+                                        validOrInvalid = True
+                                else:
+                                    if item == localPackages[index][1][id]:
+                                        pass
+                                    else:
+                                        break
+                    if "equal" in package or "moreThanEqualTo" in package or "lessThanEqualTo" in package or "tildeEqual" in package:
                         listofCheck = []
                         for id,item in enumerate(package[1]):
                             if item == localPackages[index][1][id]:
@@ -52,26 +65,22 @@ def comparisonPackage(requirementTextfileName):
                                 listofCheck.append(False)
                         if all(listofCheck):
                             validOrInvalid = True
-                    if "tildeEqual" in package:
-                        for id,item in enumerate(package[1]):
-                            if id == len(package[1])-1:
-                                if package[1][id] <= localPackages[index][1][id]:
-                                    validOrInvalid = True
-                            else:
-                                if item == localPackages[index][1][id]:
-                                    pass
-                                else:
-                                    break
-            elif(len(package) == 5 and len(localPackages[index][1]) == len(package[1])):
+            elif(len(package) == 5 and len(localPackages[index][1]) == len(package[1]) and len(localPackages[index][1]) == len(package[2])):
                 firstCheck = False; #Check if the condition satisfies the first condition
                 secondCheck = False; #Check if the condition satisfies the first condition
                 if "more" and "less" in package or "moreThanEqualTo" and "less" in package:
                     for id,item in enumerate(package[1]):
-                        if item < localPackages[index][1][id]:
-                            firstCheck = True
+                        if  not re.match('[0-9]',str(item)) or not re.match('[0-9]',str(localPackages[index][1][id])):
+                                validOrInvalid = 'UD' #Unable to determined
+                        else:
+                            if item < localPackages[index][1][id]:
+                                firstCheck = True
                     for id,item in enumerate(package[2]):
-                        if item > localPackages[index][1][id]:
-                            secondCheck = True
+                        if  not re.match('[0-9]',str(item)) or not re.match('[0-9]',str(localPackages[index][1][id])):
+                                validOrInvalid = 'UD' #Unable to determined
+                        else:
+                            if item > localPackages[index][1][id]:
+                                secondCheck = True
                 
                 if "moreThanEqualTo" in package:
                     listofCheck = []
@@ -85,8 +94,15 @@ def comparisonPackage(requirementTextfileName):
 
                 if(firstCheck == True and secondCheck == True):
                     validOrInvalid = True
-            elif (len(localPackages[index][1]) != len(package[1])):
-                validOrInvalid = 'VM'
+            else:
+                if len(package) == 3:
+                    if len(localPackages[index][1]) != len(package[1]):
+                        validOrInvalid = 'VM'
+                if len(package) == 5:
+                    if len(localPackages[index][1]) != len(package[1]) or len(localPackages[index][1]) != len(package[2]) :
+                        validOrInvalid = 'VM'
+                    if len(package[1]) != len(package[2]):
+                        validOrInvalid = 'RUD'   
                         
             if(validOrInvalid == True):
                 returnMessage.append(package[0] + " is supported")
@@ -94,6 +110,8 @@ def comparisonPackage(requirementTextfileName):
                 returnMessage.append(package[0] + " unable to determine")
             elif(validOrInvalid == 'VM'):
                 returnMessage.append(package[0] + " version mismatch with local package")
+            elif(validOrInvalid == 'RUD'):
+                returnMessage.append(package[0] + " unable to determine the requirement")        
             else:
                 returnMessage.append(package[0] + " is not supported")
         else:
